@@ -35,6 +35,10 @@ h1 {
 
 .book {
   padding: 2em;
+  width: 10vh;
+  height: 15vh;
+  background-image: linear-gradient(45deg,darkblue,cornflowerblue);
+  text-shadow: #fff 1px 0 10px;
 }
 
 #shelf {

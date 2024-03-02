@@ -2,6 +2,7 @@ import './style.css'
 
 class Book {
   constructor(title, author) {
+    this.bookId = "#book-"+crypto.randomUUID();
     this.title = title;
     this.author = author;
   }
@@ -16,9 +17,9 @@ let shelf = [
 ]
 
 function bookComponent(book) {
-  return `<div class="book">
+  return `<div class="book" id="${book.bookId}">
     <b>${book.title}</b> 
-    by ${book.author}
+    ${book.author}
   </div>`
 }
 
@@ -27,13 +28,32 @@ function shelfComponent(shelf) {
 }
 
 function addBook() {
-  shelf.push(new Book("AAA", "BBB"));
+  const book = new Book("AAA", "BBB")
+  shelf.push(book);
+  refreshShelf();
+}
+
+function refreshShelf() {
   document.querySelector("#shelf").innerHTML = 
-    `${shelfComponent(shelf)}`
+    `${shelfComponent(shelf)}`;
+  setupDeleteListeners();
+}
+
+function deleteBook(bookId) {
+  console.log("Book delete: " + bookId)
+  shelf = shelf.filter(book => book.bookId != bookId)
+  refreshShelf()
 }
 
 function setupAddButton(button) {
   button.addEventListener('click', () => addBook())
+}
+
+function setupDeleteListeners() {
+  shelf.forEach(book => 
+    document.getElementById(book.bookId)
+      .addEventListener('click', () => deleteBook(book.bookId))
+  );
 }
 
 document.querySelector('#app').innerHTML = `
@@ -47,3 +67,4 @@ document.querySelector('#app').innerHTML = `
 `
 
 setupAddButton(document.querySelector("#add_button"))
+setupDeleteListeners()
